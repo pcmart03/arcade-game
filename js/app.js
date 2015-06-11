@@ -1,7 +1,8 @@
 // Enemies our player must avoid
 var Enemy = function() {
-    this.x = 2;
+    this.x = -100;
     this.y = this.randomRow();
+    this.speed = 120
     this.sprite = 'images/enemy-bug.png';
 }
 
@@ -19,7 +20,12 @@ Enemy.prototype.randomRow = function() {
 // Update the enemy's position, required method for game
 // Parameter: dt, a time delta between ticks
 Enemy.prototype.update = function(dt) {
-      this.x = this.x + (50 * dt);
+      if (this.x < 500) {
+        this.x += this.speed * dt;
+      } else {
+        this.x = -100;
+        this.y = this.randomRow();
+      }
 }
 
 // Draw the enemy on the screen, required method for game
@@ -50,9 +56,15 @@ Player.prototype.update = function () {
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
 var normalEnemy = new Enemy();
+var fastEnemy = new Enemy();
+    fastEnemy.speed = 160;
+var veryFastEnemy = new Enemy();
+    veryFastEnemy.speed = 200;
+var slowEnemy = new Enemy();
+    slowEnemy.speed = 90;
 
 var allEnemies = [
-  normalEnemy
+  normalEnemy, fastEnemy, veryFastEnemy, slowEnemy
 ];
 
 var player = new Player();
