@@ -2,7 +2,9 @@
 var Enemy = function() {
     this.x = -100;
     this.y = this.randomRow();
-    this.speed = 120
+    this.hitBoxWidth = 50;
+    this.hitBoxHeight = 50;
+    this.speed = 120;
     this.sprite = 'images/enemy-bug.png';
 }
 
@@ -12,14 +14,34 @@ Enemy.prototype.randomRow = function() {
   row = num * 73;
   return row;
 }
-// Update the enemy's position, required method for game
-// Parameter: dt, a time delta between ticks
+
+//uses rectangular hit boxes to detect collision with player.
+Enemy.prototype.detectCollision = function () {
+  if (player.x < this.x + this.hitBoxWidth &&
+    player.x + player.hitBoxWidth > this.x &&
+    player.y < this.y + this.hitBoxHeight &&
+    player.hitBoxHeight + player.y > this.y) {
+      return true;
+  }
+}
+
+//moves the enemy across the screen, and resets the enemy once it leaves the map.
+Enemy.prototype.move = function (dt) {
+  if (this.x < 500) {
+    this.x += this.speed * dt;
+  } else {
+    this.x = -100;
+    this.y = this.randomRow();
+  }
+};
+
+
 Enemy.prototype.update = function(dt) {
-      if (this.x < 500) {
-        this.x += this.speed * dt;
-      } else {            //returns enemy to start and picks a new row.
-        this.x = -100;
-        this.y = this.randomRow();
+      //check for collision with player. If collision detected, reset player, otherwise, update enemy
+      if (this.detectCollision() == true) {
+          player.reset();
+      } else {
+        this.move(dt);
       }
 }
 
@@ -37,6 +59,8 @@ var Player = function () {
   this.sprite = 'images/char-boy.png';
   this.x = this.startX;
   this.y = this.startY;
+  this.hitBoxWidth = 50;
+  this.hitBoxHeight = 50;
 }
 
 Player.prototype.render = function () {
@@ -84,11 +108,11 @@ Player.prototype.reset = function () {
 // Place the player object in a variable called player
 var normalEnemy = new Enemy();
 var fastEnemy = new Enemy();
-    fastEnemy.speed = 160;
+    fastEnemy.speed = 200;
 var veryFastEnemy = new Enemy();
-    veryFastEnemy.speed = 200;
+    veryFastEnemy.speed = 250;
 var slowEnemy = new Enemy();
-    slowEnemy.speed = 90;
+    slowEnemy.speed = 70;
 
 var allEnemies = [
   normalEnemy, fastEnemy, veryFastEnemy, slowEnemy
