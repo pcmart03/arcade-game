@@ -21,6 +21,7 @@ Enemy.prototype.detectCollision = function () {
     player.x + player.hitBoxWidth > this.x &&
     player.y < this.y + this.hitBoxHeight &&
     player.hitBoxHeight + player.y > this.y) {
+      player.lives += -1;
       return true;
   }
 }
@@ -35,9 +36,8 @@ Enemy.prototype.move = function (dt) {
   }
 };
 
-
+//check for collision with player. If collision detected, reset player, otherwise, update enemy
 Enemy.prototype.update = function(dt) {
-      //check for collision with player. If collision detected, reset player, otherwise, update enemy
       if (this.detectCollision() == true) {
           player.reset();
       } else {
@@ -61,14 +61,30 @@ var Player = function () {
   this.y = this.startY;
   this.hitBoxWidth = 50;
   this.hitBoxHeight = 50;
+  this.score = 0;
+  this.lives = 5;
 }
 
 Player.prototype.render = function () {
   ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+  this.drawHUD();
 };
 
+//checks number of lives, if 0, alerts player with gameover message and resets score and lives.
 Player.prototype.update = function () {
-  ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+  if (this.lives == 0) {
+    alert("Game Over! Please Try again");
+    this.score = 0;
+    this.lives = 5;
+  }
+};
+
+//displays score and lives at top of gameboard
+Player.prototype.drawHUD = function () {
+  ctx.font ="17px Helvetica";
+  ctx.fillStyle = "white";
+  ctx.fillText("Score: " + this.score, 5, 70);
+  ctx.fillText("Lives: " + this.lives, 440, 70);
 };
 
 Player.prototype.handleInput = function(key) {
@@ -82,6 +98,7 @@ Player.prototype.handleInput = function(key) {
       if (this.y > 60) {
         this.y -= 35;
       } else {
+        this.score += 100;
         this.reset();
       };
       break;
