@@ -6,14 +6,14 @@ var Enemy = function() {
     this.hitBoxHeight = 50;
     this.speed = 120;
     this.sprite = 'images/enemy-bug.png';
-}
+};
 
 // Pick a row for the enemy at random
 Enemy.prototype.randomRow = function() {
   var num = Math.floor((Math.random()*3 + 1));
   row = num * 73;
   return row;
-}
+};
 
 //uses rectangular hit boxes to detect collision with player.
 Enemy.prototype.detectCollision = function () {
@@ -24,7 +24,7 @@ Enemy.prototype.detectCollision = function () {
       player.lives += -1;
       return true;
   }
-}
+};
 
 //moves the enemy across the screen, and resets the enemy once it leaves the map.
 Enemy.prototype.move = function (dt) {
@@ -38,12 +38,12 @@ Enemy.prototype.move = function (dt) {
 
 //check for collision with player. If collision detected, reset player, otherwise, update enemy
 Enemy.prototype.update = function(dt) {
-      if (this.detectCollision() == true) {
-          player.reset();
-      } else {
-        this.move(dt);
-      }
-}
+  if (this.detectCollision() == true) {
+    player.reset();
+  } else {
+      this.move(dt);
+  }
+};
 
 // Draw the enemy on the screen, required method for game
 Enemy.prototype.render = function() {
@@ -63,7 +63,7 @@ var Player = function () {
   this.hitBoxHeight = 50;
   this.score = 0;
   this.lives = 5;
-}
+};
 
 Player.prototype.render = function () {
   ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
@@ -72,7 +72,7 @@ Player.prototype.render = function () {
 
 //checks number of lives, if 0, alerts player with gameover message and resets score and lives.
 Player.prototype.update = function () {
-  if (this.lives == 0) {
+  if (this.lives === 0) {
     alert("Game Over! Please Try again");
     this.score = 0;
     this.lives = 5;
@@ -91,25 +91,25 @@ Player.prototype.handleInput = function(key) {
   switch(key) {
     case 'left':
       if (this.x > 0) {
-        this.x -= 35;
+        this.x -= 101;
       }
       break;
     case 'up':
       if (this.y > 60) {
-        this.y -= 35;
+        this.y -= 83;
       } else {
         this.score += 100;
         this.reset();
-      };
+      }
       break;
     case 'right':
-      if (this.x < 405) {
-        this.x += 35;
+      if (this.x < 335) {
+        this.x += 101;
       }
       break;
     case 'down':
       if (this.y < 380){
-        this.y += 35;
+        this.y += 83;
       }
       break;
   }
@@ -124,12 +124,15 @@ Player.prototype.reset = function () {
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
 var normalEnemy = new Enemy();
+
 var fastEnemy = new Enemy();
-    fastEnemy.speed = 200;
+fastEnemy.speed = 200;
+
 var veryFastEnemy = new Enemy();
-    veryFastEnemy.speed = 250;
+veryFastEnemy.speed = 250;
+
 var slowEnemy = new Enemy();
-    slowEnemy.speed = 70;
+slowEnemy.speed = 70;
 
 var allEnemies = [
   normalEnemy, fastEnemy, veryFastEnemy, slowEnemy
