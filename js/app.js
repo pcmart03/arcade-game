@@ -1,3 +1,4 @@
+"use strict";
 // Enemies our player must avoid
 var Enemy = function() {
     this.x = -100;
@@ -11,7 +12,7 @@ var Enemy = function() {
 // Pick a row for the enemy at random
 Enemy.prototype.randomRow = function() {
   var num = Math.floor((Math.random()*3 + 1));
-  row = num * 73;
+  var row = num * 73;
   return row;
 };
 
